@@ -15,6 +15,15 @@
 |--- tsconfig.json
 ```
 
+## Swagger Documentations (Docs)
+
+- on production
+https://deployment.api-expressjs.boilerplate.hng.tech/api-docs
+
+- Locally
+http://localhost:8000/api-docs
+
+
 ## Dependencies (Dev)
 
 - Node.js
