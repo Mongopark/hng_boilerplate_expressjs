@@ -14,12 +14,20 @@ import {
   Unique,
   UpdateDateColumn,
 } from "typeorm";
-import { Blog, Organization, Product, Profile, Sms } from ".";
+import {
+  Blog,
+  Comment,
+  Organization,
+  Product,
+  Profile,
+  Sms,
+  Notification,
+} from ".";
 import { UserRole } from "../enums/userRoles";
 import { getIsInvalidMessage } from "../utils";
 import ExtendedBaseEntity from "./extended-base-entity";
 import { Like } from "./like";
-import { Payment } from "./payment";
+import { OrganizationMember } from "./organization-member";
 import { UserOrganization } from "./user-organisation";
 
 @Entity()
@@ -60,6 +68,9 @@ export class User extends ExtendedBaseEntity {
   @Column({ nullable: true })
   otp: number;
 
+  @Column({ default: false })
+  is_superadmin: boolean;
+
   @Column({ nullable: true })
   otp_expires_at: Date;
 
@@ -81,9 +92,6 @@ export class User extends ExtendedBaseEntity {
 
   @OneToMany(() => Sms, (sms) => sms.sender, { cascade: true })
   sms: Sms[];
-
-  @OneToMany(() => Payment, (payment) => payment.user)
-  payments: Payment[];
 
   @ManyToMany(() => Organization, (organization) => organization.users, {
     cascade: true,
@@ -108,6 +116,34 @@ export class User extends ExtendedBaseEntity {
 
   @Column({ nullable: true, type: "bigint" })
   passwordResetExpires: number;
+
+  @Column("jsonb", { nullable: true })
+  timezone: {
+    timezone: string;
+    gmtOffset: string;
+    description: string;
+  };
+
+  @OneToMany(
+    () => OrganizationMember,
+    (organizationMember) => organizationMember.organization_id,
+  )
+  organizationMembers: OrganizationMember[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
+
+  @OneToMany(() => Comment, (comment) => comment.author)
+  comments: Comment[];
+
+  @Column({ nullable: true })
+  secret: string;
+
+  @Column({ default: false })
+  is_2fa_enabled: boolean;
+
+  @Column("simple-array", { nullable: true })
+  backup_codes: string[];
 
   createPasswordResetToken(): string {
     const resetToken = crypto.randomBytes(32).toString("hex");

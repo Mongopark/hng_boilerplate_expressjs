@@ -6,24 +6,30 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import ExtendedBaseEntity from "./extended-base-entity";
+import { UserRole } from "../enums/userRoles";
 
 @Entity()
-export class FAQ extends ExtendedBaseEntity {
+class FAQ extends ExtendedBaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
-  title: string;
+  @Column({ nullable: false })
+  question: string;
 
-  @Column()
-  content: string;
+  @Column({ nullable: false })
+  answer: string;
 
-  @Column()
-  author: string;
+  @Column({ nullable: false })
+  category: string;
+
+  @Column({ nullable: false, default: UserRole.SUPER_ADMIN })
+  createdBy: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 }
+
+export { FAQ };

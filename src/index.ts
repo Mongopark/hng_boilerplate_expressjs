@@ -10,25 +10,30 @@ import { errorHandler, routeNotFound } from "./middleware";
 import {
   adminRouter,
   authRoute,
+  billingPlanRouter,
   blogRouter,
   contactRouter,
   exportRouter,
   faqRouter,
   helpRouter,
   jobRouter,
-  notificationRouter,
+  newsLetterSubscriptionRoute,
   paymentFlutterwaveRouter,
   paymentRouter,
   paymentStripeRouter,
   productRouter,
+  billingRouter,
   runTestRouter,
   sendEmailRoute,
   testimonialRoute,
   userRouter,
+  paymentPaystackRouter,
+  squeezeRoute,
+  notificationsettingsRouter,
+  notificationRouter,
 } from "./routes";
 import { orgRouter } from "./routes/organisation";
 import { smsRouter } from "./routes/sms";
-import updateRouter from "./routes/updateOrg";
 import swaggerSpec from "./swaggerConfig";
 import { Limiter } from "./utils";
 import log from "./utils/logger";
@@ -68,7 +73,7 @@ server.get("/api/v1/probe", (req: Request, res: Response) => {
   res.send("I am the express api responding for team panther");
 });
 server.use("/run-tests", runTestRouter);
-
+server.use("/api/v1", faqRouter);
 server.use("/api/v1", authRoute);
 server.use("/api/v1", userRouter);
 server.use("/api/v1/queues", ServerAdapter.getRouter());
@@ -79,17 +84,21 @@ server.use("/api/v1", productRouter);
 server.use("/api/v1", paymentFlutterwaveRouter);
 server.use("/api/v1", paymentStripeRouter);
 server.use("/api/v1", smsRouter);
+server.use("/api/v1", notificationsettingsRouter);
 server.use("/api/v1", notificationRouter);
 server.use("/api/v1", paymentRouter);
+server.use("/api/v1", billingRouter);
 server.use("/api/v1", orgRouter);
 server.use("/api/v1", exportRouter);
 server.use("/api/v1", testimonialRoute);
 server.use("/api/v1", blogRouter);
 server.use("/api/v1", contactRouter);
 server.use("/api/v1", jobRouter);
-server.use("/api/v1", updateRouter);
-server.use("/api/v1", faqRouter);
 server.use("/api/v1", roleRouter);
+server.use("/api/v1", paymentPaystackRouter);
+server.use("/api/v1", billingPlanRouter);
+server.use("/api/v1", newsLetterSubscriptionRoute);
+server.use("/api/v1", squeezeRoute);
 
 server.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
